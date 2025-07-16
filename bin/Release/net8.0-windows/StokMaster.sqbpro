@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="StokMaster.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2102"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Kullanicilar" custom_title="0" dock_id="4" table="4,12:mainKullanicilar"/><table title="AjandaNotlari" custom_title="0" dock_id="1" table="4,13:mainAjandaNotlari"/><table title="UrunGrubu" custom_title="0" dock_id="5" table="4,9:mainUrunGrubu"/><dock_state state="000000ff00000000fd00000001000000020000043b000002b6fc0100000001fc000000000000043b0000011b00fffffffa000000020100000003fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000011b00fffffffb000000160064006f0063006b00420072006f00770073006500340100000000ffffffff0000011b00fffffffb000000160064006f0063006b00420072006f00770073006500350100000000ffffffff0000011b00ffffff0000043b0000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="AjandaNotlari" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="42"/><column index="2" value="60"/><column index="3" value="56"/><column index="4" value="31"/><column index="5" value="42"/><column index="6" value="59"/><column index="7" value="73"/><column index="8" value="67"/><column index="9" value="65"/><column index="10" value="80"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Kullanicilar" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="47"/><column index="2" value="90"/><column index="3" value="39"/><column index="4" value="64"/><column index="5" value="30"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="UrunGrubu" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="49"/><column index="2" value="101"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">CREATE TABLE IF NOT EXISTS Kullanicilar (
+    UserID INTEGER PRIMARY KEY,
+    PasswordHash TEXT NOT NULL,
+    Email TEXT UNIQUE NOT NULL,
+    CreatedAt TEXT,
+    Salt TEXT
+);
+
+
+CREATE TABLE IF NOT EXISTS YeniKullanicilar (
+    UserID INTEGER PRIMARY KEY,
+    FullName TEXT NOT NULL,
+    Email TEXT,
+    PhoneNumber TEXT,
+    PasswordHash TEXT,
+    CreatedAt TEXT
+);
+
+
+CREATE TABLE IF NOT EXISTS UrunGrubu (
+    UrunID INTEGER PRIMARY KEY,
+    UrunGrupAdi TEXT NOT NULL
+);
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS Urunler (
+    UrunID INTEGER PRIMARY KEY,
+    BarkodNo TEXT,
+    UrunAdi TEXT,
+    UrunKodu TEXT,
+    UrunGrubu INTEGER,
+    AlisFiyatiKDVdahil REAL,
+    AlisFiyatiKDVharic REAL,
+    SatisFiyati REAL,
+    IkinciSatisFiyati REAL,
+    KDVOrani INTEGER,
+    MevcutStokMiktari INTEGER,
+    OlcuBirimi TEXT,
+    AsgariStok INTEGER,
+    ToptanciAdi TEXT,
+    OdemeSekli TEXT,
+    KayitTarihi TEXT
+);
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS Toptancilar (
+    ToptanciID INTEGER PRIMARY KEY,
+    ToptanciAdi TEXT NOT NULL,
+    SirketYetkilisi TEXT,
+    EPosta TEXT,
+    InternetAdresi TEXT,
+    IsTelefonu TEXT,
+    GsmTelefonu TEXT,
+    Fax TEXT,
+    VD TEXT,
+    VN TEXT,
+    Adres TEXT,
+    OzelNotlar TEXT,
+    ToptanciBorc REAL
+);
+
+
+
+
+CREATE TABLE IF NOT EXISTS ToptanciOdemeLog (
+    OdemeID INTEGER PRIMARY KEY,
+    ToptanciID INTEGER,
+    ToptanciAdi TEXT,
+    OdemeTarihi TEXT,
+    OdemeSaati TEXT,
+    OdemeTutari REAL,
+    OdemeYontemi TEXT,
+    Aciklama TEXT,
+    KayitTarihi TEXT,
+    FOREIGN KEY (ToptanciID) REFERENCES Toptancilar(ToptanciID)
+);
+
+
+CREATE TABLE IF NOT EXISTS ToptanciBorcLog (
+    BorcID INTEGER PRIMARY KEY,
+    ToptanciID INTEGER,
+    ToptanciAdi TEXT,
+    EskiToplamBorc REAL,
+    EklenenTutar REAL,
+    YeniToplamBorc REAL,
+    Tarih TEXT,
+    Saat TEXT,
+    Aciklama TEXT,
+    KayitTarihi TEXT,
+    FOREIGN KEY (ToptanciID) REFERENCES Toptancilar(ToptanciID)
+);
+
+
+CREATE TABLE IF NOT EXISTS Teklifler (
+    TeklifID INTEGER PRIMARY KEY,
+    TeklifTarihi TEXT,
+    ToplamTutar REAL,
+    IndirimTutar REAL,
+    NetTutar REAL,
+    Aciklama TEXT
+);
+
+CREATE TABLE IF NOT EXISTS TeklifDetay (
+    TeklifDetayID INTEGER PRIMARY KEY,
+    TeklifID INTEGER,
+    UrunID INTEGER,
+    BarkodNo TEXT,
+    UrunAdi TEXT,
+    Birim TEXT,
+    Fiyat REAL,
+    Miktar INTEGER,
+    Tutar REAL,
+    FOREIGN KEY (TeklifID) REFERENCES Teklifler(TeklifID),
+    FOREIGN KEY (UrunID) REFERENCES Urunler(UrunID)
+);
+
+CREATE TABLE IF NOT EXISTS Satis (
+    SatisID INTEGER PRIMARY KEY,
+    Tarih TEXT,
+    MusteriID INTEGER,
+    ToplamTutar REAL,
+    OdemeTipi TEXT,
+    AlinanPara REAL,
+    ParaUstu REAL,
+    Kasiyer TEXT,
+    TaksitSayisi INTEGER,
+    TaksitTutar REAL,
+    FOREIGN KEY (MusteriID) REFERENCES Musteri(MusteriID)
+);
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS SatisDetay (
+    DetayID INTEGER PRIMARY KEY,
+    SatisID INTEGER,
+    Barkod TEXT,
+    UrunAdi TEXT,
+    Birim TEXT,
+    Miktar INTEGER,
+    Fiyat REAL,
+    ToplamTutar REAL,
+    SatisTarihi TEXT,
+    IadeMiktar INTEGER,
+    IadeTarihi TEXT,
+    FOREIGN KEY (SatisID) REFERENCES Satis(SatisID)
+);
+
+
+CREATE TABLE IF NOT EXISTS SatisIade (
+    IadeID INTEGER PRIMARY KEY,
+    SatisID INTEGER,
+    DetayID INTEGER,
+    Barkod TEXT,
+    UrunAdi TEXT,
+    Miktar INTEGER,
+    IadeTutar REAL,
+    IadeTarihi TEXT,
+    IadeYontemi TEXT,
+    Aciklama TEXT,
+    FOREIGN KEY (SatisID) REFERENCES Satis(SatisID),
+    FOREIGN KEY (DetayID) REFERENCES SatisDetay(DetayID)
+);
+
+
+CREATE TABLE IF NOT EXISTS Musteri (
+    MusteriID INTEGER PRIMARY KEY,
+    Adi TEXT,
+    Soyadi TEXT,
+    TicariUnvani TEXT,
+    GsmTelefonu TEXT,
+    VergiDairesi TEXT,
+    VergiNumarasi TEXT,
+    Adres TEXT,
+    IlIlce TEXT,
+    Ulke TEXT,
+    OzelNotlar TEXT,
+    Email TEXT,
+    DevredenBorc REAL,
+    LimitBelirle REAL,
+    KayitTarihi TEXT,
+    VeresiyeToplam REAL,
+    KalanTaksitToplam REAL,
+    ToplamBorc REAL
+);
+
+SELECT*FROM Musteri
+
+
+CREATE TABLE IF NOT EXISTS MusteriOdemeLog (
+    LogID INTEGER PRIMARY KEY,
+    MusteriID INTEGER,
+    MusteriAdi TEXT,
+    OdemeTarihi TEXT,
+    OdemeTutari REAL,
+    OdemeYontemi TEXT,
+    Aciklama TEXT,
+    FOREIGN KEY (MusteriID) REFERENCES Musteri(MusteriID)
+);
+
+
+CREATE TABLE IF NOT EXISTS MusteriBorcEkleLog (
+    LogID INTEGER PRIMARY KEY,
+    MusteriID INTEGER,
+    MusteriAdi TEXT,
+    MusteriSoyadi TEXT,
+    TicariUnvani TEXT,
+    EskiToplamBorc REAL,
+    EklenenTutar REAL,
+    YeniToplamBorc REAL,
+    Tarih TEXT,
+    Saat TEXT,
+    Aciklama TEXT,
+    KayitTarihi TEXT,
+    FOREIGN KEY (MusteriID) REFERENCES Musteri(MusteriID)
+);
+
+
+CREATE TABLE IF NOT EXISTS AjandaNotlari (
+    NotID INTEGER PRIMARY KEY,
+    NotTarihi TEXT,
+    NotSaati TEXT,
+    Gun TEXT,
+    Baslik TEXT,
+    Aciklama TEXT,
+    Hatirlatilsin INTEGER,
+    Hatirlatildi INTEGER,
+    TekrarTipi TEXT,
+    EpostaAdresi TEXT
+);
+
+-- Örnek UrunGrubu kayıtları
+INSERT INTO UrunGrubu (UrunID, UrunGrupAdi) VALUES
+(2, 'Kırtasiye'),
+(3, 'Donanım'),
+(4, 'Elektronik'),
+(5, 'Gıda'),
+(6, 'Temizlik'),
+(7, 'Atıştırmalık'),
+(8, 'Ev Aletleri');
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Ahmet.Yılmaz@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Ahmet' AND Soyadi = 'Yılmaz';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Mehmet.Demir@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Mehmet' AND Soyadi = 'Demir';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Ayşe.Kaya@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Ayşe' AND Soyadi = 'Kaya';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Fatma.Öztürk@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Fatma' AND Soyadi = 'Öztürk';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Ali.Çelik@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Ali' AND Soyadi = 'Çelik';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Zeynep.Acar@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Zeynep' AND Soyadi = 'Acar';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Murat.Koç@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Murat' AND Soyadi = 'Koç';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Elif.Arslan@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Elif' AND Soyadi = 'Arslan';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Hüseyin.Yıldız@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Hüseyin' AND Soyadi = 'Yıldız';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Emine.Kurt@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Emine' AND Soyadi = 'Kurt';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Hasan.Bozkurt@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Hasan' AND Soyadi = 'Bozkurt';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Nur.Türkmen@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Nur' AND Soyadi = 'Türkmen';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Halil.Taş@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Halil' AND Soyadi = 'Taş';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Aylin.Uçar@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Aylin' AND Soyadi = 'Uçar';
+
+
+UPDATE Musteri SET 
+    VergiDairesi = 'Kadıköy VD',
+    VergiNumarasi = '1234567890',
+    Adres = 'İstanbul, Kadıköy, Örnek Mah. No:123',
+    IlIlce = 'İstanbul/Kadıköy',
+    Ulke = 'Türkiye',
+    OzelNotlar = 'Düzenli müşteri.',
+    Email = LOWER('Burak.Şahin@example.com'),
+    DevredenBorc = 0.00,
+    LimitBelirle = 100000.00,
+    KayitTarihi = '2025-07-09',
+    VeresiyeToplam = 35000.00,
+    KalanTaksitToplam = 10000.00,
+    ToplamBorc = 45000.00
+WHERE Adi = 'Burak' AND Soyadi = 'Şahin';
+
+
+
+
+
+
+</sql><sql name="SQL 2*">-- Örnek UrunGrubu kayıtları
+INSERT INTO UrunGrubu (UrunID, UrunGrupAdi) VALUES
+(2, 'Ayakkabı'),
+(2, 'Kırtasiye'),
+(3, 'Donanım'),
+(4, 'Elektronik'),
+(5, 'Gıda'),
+(6, 'Temizlik'),
+(7, 'Atıştırmalık'),
+(8, 'Ev Aletleri');
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
