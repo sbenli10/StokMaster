@@ -1,0 +1,79 @@
+PROJE ADI: STOKMASTER – Stok ve Satış Takip Sistemi
+
+PROJE TÜRÜ: Masaüstü Uygulama (Windows Forms - C#)
+
+Örnek Giriş Bilgileri : 
+Gmail : benlisaid2@gmail.com
+Şifre:  12345
+
+
+AÇIKLAMA:
+StokMaster uygulaması, küçük ve orta ölçekli işletmelerin satış, stok, müşteri ve tedarikçi işlemlerini yönetmelerine olanak sağlayan kapsamlı bir stok ve satış takip sistemidir. Proje, kullanıcı dostu arayüzü ile tüm işlemlerin kolayca yönetilmesini amaçlamaktadır.
+
+UYGULAMA AKIŞI:
+1. Login Ekranı:
+   - Uygulama açıldığında kullanıcıdan e-posta ve şifre ile giriş yapması istenir.
+   - Kullanıcı, “Kayıt Ol” ve “Şifremi Unuttum” seçenekleri ile yeni kullanıcı ekleyebilir veya şifresini yenileyebilir.
+2. Ana Sayfa:
+   - Giriş başarılı olduğunda kullanıcı Ana Sayfa paneline yönlendirilir.
+   - Ürün Girişi, Satış İşlemleri, Müşteri ve Toptancı İşlemleri gibi tüm modüllere erişim buradan sağlanır.
+
+MODÜLLER:
+
+1. Ürün Girişi:
+   - Yeni ürün tanımlama (barkod, ad, fiyat, KDV, stok miktarı vb.)
+   - Ürün grubu ve tedarikçi atama.
+   - Barkod oluşturma ve okutma desteği.
+
+2. Satış İşlemleri:
+   - Barkod veya ürün adı ile ürün seçimi.
+   - Nakit, kredi kartı, veresiye ve taksitli satış seçenekleri.
+   - İskonto, indirim ve ekran klavyesi desteği.
+   - Satış onaylama ve iptal işlemleri.
+
+3. Fiyat Gör:
+   - Barkod ile ürün bilgileri (ad, stok, fiyat) görüntüleme.
+
+4. Fiyat Teklifi:
+   - Müşteriye özel teklif hazırlama ve yazdırma.
+   - İndirim ve iskonto seçenekleri ile teklif düzenleme.
+
+5. Müşteri İşlemleri:
+   - Müşteri ekleme, silme, düzenleme.
+   - Borç takibi, taksit bilgileri, ödeme alma.
+   - Müşteriden iade işlemleri.
+
+6. Toptancı İşlemleri:
+   - Toptancı ekleme, silme, borç ve ödeme takibi.
+
+7. Stok Takibi:
+   - Ürünleri arama, filtreleme, sıralama.
+   - Ürün düzeltme, silme, stok durumu izleme.
+
+8. Ajanda:
+   - Tarih, saat ve tekrar tipine göre not ve hatırlatma ekleme.
+   - E-posta adresine bağlı ajanda kaydı.
+
+TEKNİK ÖZELLİKLER:
+- Programlama Dili: C# (.NET Framework)
+- Arayüz: Windows Forms
+- Veritabanı: SQL Lite
+- Barcode/QR Kod: Barkod oluşturma ve okuma desteği.
+- Kullanıcı Yönetimi: Giriş, kayıt ol, şifre yenileme.
+- Gelişmiş UI: DevExpress veya benzeri component desteği ile şık ve modern arayüzler.
+
+HEDEF KULLANICI KİTLESİ:
+- Marketler
+- Kırtasiyeler
+- Küçük ve orta ölçekli mağazalar
+- Stok takibi yapmak isteyen ticari işletmeler
+
+SONUÇ:
+StokMaster uygulaması, kullanıcı dostu arayüzü ve geniş kapsamlı özellikleri ile kurs bitirme projesi için yeterli ve etkili bir projedir. Stok, satış, müşteri ve tedarikçi işlemlerinin yönetimini tek bir platformda toplar. Geliştirilmeye açık yapısı ile mezuniyet sonrası da geliştirilmeye devam edilebilir.
+
+Hazırlayan: Said Benli
+Tarih: 2025
+Eğitim: MCSD (766)
+Eğitmen: İsmail Çoban
+  
+
